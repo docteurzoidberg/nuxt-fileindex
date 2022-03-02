@@ -1,5 +1,11 @@
 FROM node:16-alpine3.12 as builder
 
+ARG COLOR
+ARG TITLE
+
+ENV COLOR ${COLOR}
+ENV TITLE ${TITLE}
+
 WORKDIR /app
 
 # First dependencies. for cache

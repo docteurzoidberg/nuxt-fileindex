@@ -11,19 +11,20 @@
       'Content-Type': 'application/json'
     }
   }));
+ 
 </script>
 
 <template lang="pug">
 div(class="dark")
-  div(class="flex flex-col min-h-screen font-sans dark:bg-gray-800 test")
+  div(class="flex flex-col min-h-screen font-sans bg-gray-800 test")
     header(class="shadow sticky top-0 bg-cyan-700")
-      div(class="border-b border-cyan-700 dark:border-cyan-800 text-white") 
+      div(class="border-b border-cyan-800 text-white") 
         div(class="container flex flex-wrap justify-between items-center space-x-6 mx-auto p-4 md:flex-row xl:max-w-screen-xl")
           a(class="flex items-center space-x-2 p-1" href="/" title="Home")
             i(class='fas fa-folder-open text-xl') &nbsp;
             span(class="text-xl font-semibold") 
-              | DRZ Web File Index
-      div(class="border-t border-cyan-500 dark:border-cyan-600 text-white")
+              | {{$config.title}}
+      div(class="border-t border-cyan-600 text-white")
         div(class="container flex flex-wrap justify-between items-center space-x-6 mx-auto px-4 py-1 md:flex-row xl:max-w-screen-xl")
           div(class="flex-1 font-mono text-white text-sm tracking-tight overflow-x-auto whitespace-nowrap py-1")
             span 
@@ -36,7 +37,7 @@ div(class="dark")
                 | {{item}}
               span(v-if="index>0 && index<decodeURI(data.path).split('/').length-1") &nbsp;/&nbsp;
               
-    div(class="flex flex-col flex-grow container mx-auto px-4 xl:max-w-screen-xl dark:text-white")
+    div(class="flex flex-col flex-grow container mx-auto px-4 xl:max-w-screen-xl text-white")
       div(class="my-4")
         div(class="flex justify-between font-bold p-4")
           div(class="hidden pr-2") -
@@ -46,7 +47,7 @@ div(class="dark")
           div(class="font-mono text-right w-1/4 ml-2 hidden sm:block") Date
         ul
           li(v-if='data.path!=="/"')
-            a(:href="data.parent" class="flex flex-col items-center rounded-lg font-mono group hover:bg-gray-100 hover:shadow dark:hover:bg-cyan-700")
+            a(:href="data.parent" class="flex flex-col items-center rounded-lg font-mono group hover:shadow hover:bg-cyan-700")
               div(class="flex items-center p-4 w-full")
                 div(class="pr-2")
                   i(class="fas fa-level-up-alt fa-fw fa-lg")
@@ -55,7 +56,7 @@ div(class="dark")
                 div(class="hidden whitespace-nowrap mx-2 w-1/6") -
                 div(class="hidden whitespace-nowrap truncate ml-2 w-1/4") -
           li(v-for="file in data.files" :key="file")
-            a(:href="file.url" class="flex flex-col items-center rounded-lg font-mono group hover:bg-gray-100 hover:shadow dark:hover:bg-cyan-700")
+            a(:href="file.url" class="flex flex-col items-center rounded-lg font-mono group hover:shadow hover:bg-cyan-700")
               div(class="flex justify-between items-center p-4 w-full")
                 div(class="pr-2")
                   i(v-if='file.isDirectory' class="fas fa-folder-open fa-fw fa-lg")

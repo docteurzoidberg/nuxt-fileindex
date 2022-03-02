@@ -2,6 +2,13 @@
   import { useNuxtApp } from '#app'
   const nuxtApp = await useNuxtApp();
   const folder =  nuxtApp.ssrContext ? nuxtApp.ssrContext.url : document.location.pathname;
+  const title = nuxtApp.$config.title;
+  const classBg = 'bg-'+nuxtApp.$config.color+'-600';
+  const classLightBorder = 'border-' + nuxtApp.$config.color + '-600';
+  const classDarkBorder = 'border-' + nuxtApp.$config.color + '-800';
+  const classHoverBg = 'hover:bg-' + nuxtApp.$config.color + '-700';
+
+
   const { data } = await useAsyncData('files', () => $fetch('/api/files', {
     method: 'POST',
     body: {
@@ -17,14 +24,14 @@
 <template lang="pug">
 div(class="dark")
   div(class="flex flex-col min-h-screen font-sans bg-gray-800 test")
-    header(class="shadow sticky top-0 bg-cyan-700")
-      div(class="border-b border-cyan-800 text-white") 
+    header(class="shadow sticky top-0" :class="classBg")
+      div(class="border-b text-white" :class="classDarkBorder")
         div(class="container flex flex-wrap justify-between items-center space-x-6 mx-auto p-4 md:flex-row xl:max-w-screen-xl")
           a(class="flex items-center space-x-2 p-1" href="/" title="Home")
             i(class='fas fa-folder-open text-xl') &nbsp;
             span(class="text-xl font-semibold") 
-              | {{$config.title}}
-      div(class="border-t border-cyan-600 text-white")
+              | {{title}}
+      div(class="border-t text-white" :class="classLightBorder")
         div(class="container flex flex-wrap justify-between items-center space-x-6 mx-auto px-4 py-1 md:flex-row xl:max-w-screen-xl")
           div(class="flex-1 font-mono text-white text-sm tracking-tight overflow-x-auto whitespace-nowrap py-1")
             span 
@@ -47,7 +54,7 @@ div(class="dark")
           div(class="font-mono text-right w-1/4 ml-2 hidden sm:block") Date
         ul
           li(v-if='data.path!=="/"')
-            a(:href="data.parent" class="flex flex-col items-center rounded-lg font-mono group hover:shadow hover:bg-cyan-700")
+            a(:href="data.parent" class="flex flex-col items-center rounded-lg font-mono group hover:shadow" :class="classHoverBg")
               div(class="flex items-center p-4 w-full")
                 div(class="pr-2")
                   i(class="fas fa-level-up-alt fa-fw fa-lg")
@@ -56,7 +63,7 @@ div(class="dark")
                 div(class="hidden whitespace-nowrap mx-2 w-1/6") -
                 div(class="hidden whitespace-nowrap truncate ml-2 w-1/4") -
           li(v-for="file in data.files" :key="file")
-            a(:href="file.url" class="flex flex-col items-center rounded-lg font-mono group hover:shadow hover:bg-cyan-700")
+            a(:href="file.url" class="flex flex-col items-center rounded-lg font-mono group hover:shadow" :class="classHoverBg")
               div(class="flex justify-between items-center p-4 w-full")
                 div(class="pr-2")
                   i(v-if='file.isDirectory' class="fas fa-folder-open fa-fw fa-lg")

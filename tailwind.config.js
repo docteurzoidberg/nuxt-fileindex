@@ -7,6 +7,15 @@ module.exports = {
     "./app.vue",
     "./plugins/**/*.{js,ts}"
   ],
+  safelist: [
+    {
+      pattern: /bg-(.*)-(.*)/,
+      variants: ['hover', 'focus']
+    },
+    {
+      pattern: /border-(.*)-(.*)/
+    }
+  ],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {},

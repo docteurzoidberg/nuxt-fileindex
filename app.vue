@@ -14,6 +14,29 @@
     return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
   };
 
+  const getItemIcon = (file) => {
+    const fileExt = file.split('.').pop();
+    if (fileExt === 'jpg' || fileExt === 'jpeg' || fileExt === 'png' || fileExt === 'gif') {
+      return 'image';
+    } else if (fileExt === 'mkv' || fileExt === 'avi' || fileExt === 'mp4' || fileExt === 'flv' || fileExt === 'webm' || fileExt === 'mov' || fileExt === 'wmv' || fileExt === 'mpg' || fileExt === 'mpeg' || fileExt === 'm4v' || fileExt === '3gp' || fileExt === 'ts') {
+      return 'video';
+    } else if (fileExt === 'pdf') {
+      return 'file-pdf';
+    } else if (fileExt === 'doc' || fileExt === 'docx') {
+      return 'file-word';
+    } else if (fileExt === 'xls' || fileExt === 'xlsx') {
+      return 'file-excel';
+    } else if (fileExt === 'ppt' || fileExt === 'pptx') {
+      return 'file-powerpoint';
+    } else if (fileExt === 'zip' || fileExt === 'rar') {
+      return 'file-archive';
+    } else if (fileExt === 'txt') {
+      return 'file-alt';
+    } else {
+      return 'file';
+    }
+  };
+
   const formatDate = (date) => {
     const d = new Date(date);
     return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
@@ -109,7 +132,7 @@ div(class="dark")
               div(class="flex justify-between items-center p-4 w-full")
                 div(class="pr-2")
                   i(v-if='file.isDirectory' class="fas fa-folder-open fa-fw fa-lg text-yellow-300")
-                  i(v-else class="fas fa-file fa-fw fa-lg text-blue-400")
+                  i(v-else class="fas fa-fw fa-lg text-blue-400" :class="'fa-'+getItemIcon(file.name)")
                 div(class="flex-1 truncate") {{ file.name }}
                 div(class="hidden ml-2") todo: popup info fichiers / metas
                 div(class="whitespace-nowrap text-right mx-2 w-1/6 sm:block") {{(file.size>0 && !file.isDirectory )?humanReadableSize(file.size):''}}

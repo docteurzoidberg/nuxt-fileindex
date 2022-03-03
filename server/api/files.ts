@@ -45,11 +45,18 @@ export default async (req,res) => {
             date: stats.mtime
         }
     });
+    
+    const fileandStatsOrdered = filesWithStats.sort((a,b) => {
+        if(a.isDirectory && !b.isDirectory) return -1;
+        if(!a.isDirectory && b.isDirectory) return 1;
+        return a.name.localeCompare(b.name);
+    });
+
     const parent = body.path.split("/").slice(0,-1).join("/");
     console.log('body path:' + body.path);
     console.log('parent: '+ parent);
     return {
-        files: filesWithStats,
+        files: fileandStatsOrdered,
         path: body.path,
         parent: parent!==''? parent: '/',
         pathArray: body.path.split("/")

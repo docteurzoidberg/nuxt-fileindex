@@ -76,8 +76,8 @@ div(class="dark")
             a(:href="file.url" class="flex flex-col items-center rounded-lg font-mono group hover:shadow" :class="classHoverBg")
               div(class="flex justify-between items-center p-4 w-full")
                 div(class="pr-2")
-                  i(v-if='file.isDirectory' class="fas fa-folder-open fa-fw fa-lg")
-                  i(v-else class="fas fa-file fa-fw fa-lg")
+                  i(v-if='file.isDirectory' class="fas fa-folder-open fa-fw fa-lg text-yellow-300")
+                  i(v-else class="fas fa-file fa-fw fa-lg text-blue-400")
                 div(class="flex-1 truncate") {{ file.name }}
                 div(class="hidden ml-2") todo
                 div(class="whitespace-nowrap text-right mx-2 w-1/6 sm:block") {{file.size>0?file.size:''}}

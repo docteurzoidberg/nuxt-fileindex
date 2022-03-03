@@ -3,6 +3,7 @@
   const nuxtApp = await useNuxtApp();
   //const errorHandler = await useError();
   const folder =  nuxtApp.ssrContext ? nuxtApp.ssrContext.url : document.location.pathname;
+  const parent = folder.split('/').length > 2 ? folder.split('/').slice(0, -1).join('/') : '/';
   const title = nuxtApp.$config.title;
   const classBg = 'bg-'+nuxtApp.$config.color+'-600';
   const classLightBorder = 'border-' + nuxtApp.$config.color + '-600';
@@ -26,9 +27,13 @@
 
 <template lang="pug">
 div(class="dark")
-  div(v-if="error")
-    p(class="text-red-500")
-      | pwet erreur
+  div(v-if="error" class="flex flex-col min-h-screen font-sans items-center justify-center bg-gray-800")
+    h1(class="text-white error")
+      | 404
+    h1(class="text-red-300 text-2xl")
+      | Fichier ou dossier introuvable
+    a(:href="parent" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 py-4 px-4 rounded outline-none focus:shadow-outline")
+      | Retour
   div(v-else class="flex flex-col min-h-screen font-sans bg-gray-800 test")
     header(class="shadow sticky top-0" :class="classBg")
       div(class="border-b text-white" :class="classDarkBorder")
@@ -94,3 +99,8 @@ div(class="dark")
     }
   }
 </script>
+<style>
+.error {
+  font-size: 12rem;
+}
+</style>

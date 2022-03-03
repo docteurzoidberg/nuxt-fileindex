@@ -7,25 +7,30 @@ config();
 
 const folderRoot = process.env.DATA_PATH ?? "/data/";
 
-export default async (req) => {
+export default async (req,res) => {
+
     const body = await useBody(req);
+    
+    if(!body) return { status: 400, body: "No body" };
+    if(!body.path) return { status: 400, body: "No path" };
     
     //remove trailing slash if any
     if(body.path && body.path.length > 2 && body.path.endsWith('/') ) 
         body.path = body.path.slice(0, -1);
 
     const path = folderRoot + body.path!='/'? normalize(folderRoot + decodeURI(body.path)):'';
-    console.log('path: ' + path);
-    const stats = statSync(path);
-    if(!stats.isDirectory()){
-        return {
-            status: 404,
-            body: {
-                error: 'Not a directory'
-            }
+    try {
+        const stats = statSync(path);
+        if(!stats || !stats.isDirectory()){
+            throw new Error('Not a directory');
         }
     }
-
+    catch(e){
+        console.log('not found: ' + path);
+        res.statusCode = 404;
+        return res.end("Not found");
+    }
+    console.log('path: ' + path);
     const files = readdirSync(path);
     const filesWithStats = files.map(file => {
         const filePath =  normalize(path + '/'+ file);
@@ -48,7 +53,6 @@ export default async (req) => {
         path: body.path,
         parent: parent!==''? parent: '/',
         pathArray: body.path.split("/")
-
     };
 }
 

@@ -1,15 +1,14 @@
 <script setup>
   import { useNuxtApp } from '#app'
   const nuxtApp = await useNuxtApp();
+  //const errorHandler = await useError();
   const folder =  nuxtApp.ssrContext ? nuxtApp.ssrContext.url : document.location.pathname;
   const title = nuxtApp.$config.title;
   const classBg = 'bg-'+nuxtApp.$config.color+'-600';
   const classLightBorder = 'border-' + nuxtApp.$config.color + '-600';
   const classDarkBorder = 'border-' + nuxtApp.$config.color + '-800';
   const classHoverBg = 'hover:bg-' + nuxtApp.$config.color + '-700';
-
-
-  const { data } = await useAsyncData('files', () => $fetch('/api/files', {
+  const { data, error } = await useFetch('/api/files', {
     method: 'POST',
     body: {
       path: folder
@@ -17,13 +16,20 @@
     headers: {
       'Content-Type': 'application/json'
     }
-  }));
- 
+  });
+  if (process.server && error) {
+    const newerror = new Error();
+    newerror.statusCode = 404;
+    nuxtApp.ssrContext.nuxt.error = newerror;
+  }
 </script>
 
 <template lang="pug">
 div(class="dark")
-  div(class="flex flex-col min-h-screen font-sans bg-gray-800 test")
+  div(v-if="error")
+    p(class="text-red-500")
+      | pwet erreur
+  div(v-else class="flex flex-col min-h-screen font-sans bg-gray-800 test")
     header(class="shadow sticky top-0" :class="classBg")
       div(class="border-b text-white" :class="classDarkBorder")
         div(class="container flex flex-wrap justify-between items-center space-x-6 mx-auto p-4 md:flex-row xl:max-w-screen-xl")

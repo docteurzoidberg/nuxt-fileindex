@@ -1,7 +1,6 @@
 <script setup>
   import { useNuxtApp } from '#app'
   const nuxtApp = await useNuxtApp();
-  //const errorHandler = await useError();
   const folder =  nuxtApp.ssrContext ? nuxtApp.ssrContext.url : document.location.pathname;
   const parent = folder.split('/').length > 2 ? folder.split('/').slice(0, -1).join('/') : '/';
   const title = nuxtApp.$config.title;
@@ -51,7 +50,7 @@ div(class="dark")
             span(v-for="item, index in decodeURI(data.path).split('/')" :key="index")
               span(v-if="index==decodeURI(data.path).split('/').length-1")
                 | {{item}}
-              a.underline(v-if="index!=decodeURI(data.path).split('/').length-1" href=item)
+              a.underline(v-if="index!=decodeURI(data.path).split('/').length-1" :href="decodeURI(data.path).split('/').slice(0,-index).join('/')+'/'")
                 | {{item}}
               span(v-if="index>0 && index<decodeURI(data.path).split('/').length-1") &nbsp;/&nbsp;
               
@@ -59,9 +58,9 @@ div(class="dark")
       div(class="my-4")
         div(class="flex justify-between font-bold p-4")
           div(class="hidden pr-2") -
-          div(class="flex-grow font-mono mr-2 text-left") File name
+          div(class="flex-grow font-mono mr-2 text-left") Nom
           div(class="hidden ml-2") -
-          div(class="font-mono text-right w-1/6 mx-2 hidden sm:block") Size
+          div(class="font-mono text-right w-1/6 mx-2 hidden sm:block") Taille
           div(class="font-mono text-right w-1/4 ml-2 hidden sm:block") Date
         ul
           li(v-if='data.path!=="/"')

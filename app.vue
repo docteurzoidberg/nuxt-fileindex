@@ -37,6 +37,14 @@
     }
   };
 
+  const getFolderIcon = (folder) => {
+    if(folder.size===2) {
+      return 'folder-open';
+    } else {
+      return 'folder';
+    }
+  }
+
   const formatDate = (date) => {
     const d = new Date(date);
     return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
@@ -110,7 +118,7 @@ div(class="dark")
               span(v-if="index>0 && index<decodeURI(data.path).split('/').length-1") &nbsp;/&nbsp;
               
     div(class="flex flex-col flex-grow container mx-auto px-4 xl:max-w-screen-xl text-white")
-      div(v-if="filterList(data.files,search).length>0" class="my-4")
+      div(class="my-4")
         div(class="flex justify-between font-bold p-4")
           div(class="hidden pr-2") -
           div(class="flex-grow font-mono mr-2 text-left") Nom
@@ -131,20 +139,19 @@ div(class="dark")
             a(:href="file.url" class="flex flex-col items-center rounded-lg font-mono group hover:shadow" :class="classHoverBg")
               div(class="flex justify-between items-center p-4 w-full")
                 div(class="pr-2")
-                  i(v-if='file.isDirectory' class="fas fa-folder-open fa-fw fa-lg text-yellow-300")
+                  i(v-if='file.isDirectory' class="fas fa-fw fa-lg text-yellow-300" :class="'fa-'+ getFolderIcon(file)")
                   i(v-else class="fas fa-fw fa-lg text-blue-400" :class="'fa-'+getItemIcon(file.name)")
                 div(class="flex-1 truncate") {{ file.name }}
                 div(class="hidden ml-2") todo: popup info fichiers / metas
                 div(class="whitespace-nowrap text-right mx-2 w-1/6 sm:block") {{(file.size>0 && !file.isDirectory )?humanReadableSize(file.size):''}}
                 div(class="whitespace-nowrap text-right truncate ml-2 w-1/4 sm:block") {{formatDate(file.date)}}
-      div(v-else class="my-4")
-        div(class="text-center text-white text-2xl")
-          
-          | Aucun résultat
-      div(v-if="search!=''" class="my-4 font-mono") 
-           
-        i(class="fas fa-filter text-md text-pink-300") &nbsp;
-        | + {{data.files.length - filterList(data.files,search).length }} element(s) filtré(s) &nbsp;
+      
+          li(v-if="filterList(data.files,search).length==0" class="p-4 text-center text-white text-2xl")
+            | Aucun résultat
+          li(v-if="search!=''") 
+           div(class="my-4 p-4 font-mono")
+            i(class="fas fa-filter text-md text-pink-300") &nbsp;
+            | + {{data.files.length - filterList(data.files,search).length }} element(s) filtré(s) &nbsp;
             
 </template>
 
